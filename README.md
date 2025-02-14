@@ -38,3 +38,18 @@ This project is a simple authentication system built with **React (TypeScript)**
 - Node.js (v16+ recommended)
 - PostgreSQL (or any database of your choice)
 - NestJS CLI (optional, for backend development)
+
+### Installation
+
+1. Clone and build the project:
+   ```bash
+   git clone https://github.com/Vincentnilam/nestjs-auth.git
+   cd nestjs-auth
+   # Frontend
+   cd client
+   npm install
+
+   # Backend
+   cd ../server
+   npm install
+  ``
