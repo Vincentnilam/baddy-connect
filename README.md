@@ -52,4 +52,13 @@ This project is a simple authentication system built with **React (TypeScript)**
    # Backend
    cd ../server
    npm install
-  ``
+2. Follow sample dotenv (.env.sample) and create a dotenv in the root directory
+3. Run the project
+   ```bash
+   # frontend
+   cd client
+   npm run dev
+   
+   # backend
+   cd ../server
+   npm run start
