@@ -58,6 +58,16 @@ This project is a simple authentication system built with **React (TypeScript)**
    # frontend
    cd client
    npm run dev
+
+Successful Login (hmm signup is still via POST manually)
+![image](https://github.com/user-attachments/assets/c31b7fd1-82b0-49b0-804b-21899450e9d9)
+
+![image](https://github.com/user-attachments/assets/3f209206-9433-45c1-be1b-90ffc0a11e91)
+
+Unsuccessful Login
+![image](https://github.com/user-attachments/assets/4b7102d2-d71c-442c-b8e7-36c4d6b2c513)
+
+
    
    # backend
    cd ../server
