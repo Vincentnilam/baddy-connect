@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { FaEye, FaEyeSlash} from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaSpinner} from 'react-icons/fa';
 import { useNavigate } from "react-router";
 
 const AuthPage: React.FC = () => {
@@ -12,6 +12,8 @@ const AuthPage: React.FC = () => {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [loading, setLoading] = useState(false);
+
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	
 	const [error, setError] = useState('');
@@ -46,8 +48,10 @@ const AuthPage: React.FC = () => {
 			if (password !== confirmPassword) {
 				setError("Passwords do not match");
 				return;
-		} 
-	}
+			} 
+		}
+
+		setLoading(true);
 
 		try {
 			// either login/signup based on authMode for endpoint and body
@@ -78,6 +82,8 @@ const AuthPage: React.FC = () => {
 		} catch (err) {
 			console.error("error during login: ", err);
 			setError("An error occured. Please try again.");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -153,6 +159,7 @@ const AuthPage: React.FC = () => {
 								value={username}
 								onChange={handleUsernameChange}
 								placeholder="Enter your username"
+								required
 							/>
 						</div>
 						<div className="mb-6">
@@ -206,10 +213,10 @@ const AuthPage: React.FC = () => {
 						<div className="flex justify-center">
 							<button
 								type="submit"
-								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 cursor-pointer"
-								disabled={!!error}
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-[100px] h-[40px]"
+								disabled={loading || !!error}
 							>
-								{authMode === "login" ? "Log In" : "Sign Up"}
+								{loading ? <FaSpinner className="animate-spin" /> : authMode === "login" ? "Log In" : "Sign Up"}
 							</button>
 						</div>
 					</form>
