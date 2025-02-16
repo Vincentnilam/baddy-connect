@@ -12,12 +12,22 @@ const AuthPage: React.FC = () => {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	
 	const [error, setError] = useState('');
 	
 	const navigate = useNavigate();
 
-	const toggleAuthMode = () => setAuthMode(authMode === "login" ? "signup" : "login");
+	const toggleAuthMode = () => {
+		setAuthMode(authMode === "login" ? "signup" : "login");
+		setError("");
+		setEmail("");
+		setUsername("");
+		setPassword("");
+		setConfirmPassword("");
+		setShowConfirmPassword(false);
+		setShowPassword(false);
+	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -27,34 +37,81 @@ const AuthPage: React.FC = () => {
 			return;
 		}
 
-		if (authMode === "signup" && password !== confirmPassword) {
-			setError("Passwords do not match");
-			return;
-		}
+		if (authMode === "signup") {
+			if (!email) {
+				setError("Email is required");
+				return;
+			}
+
+			if (password !== confirmPassword) {
+				setError("Passwords do not match");
+				return;
+		} 
+	}
 
 		try {
-			const res = await fetch("http://localhost:3000/auth/login", {
+			// either login/signup based on authMode for endpoint and body
+			const endpoint = authMode === "login" ? "login" : "signup";
+			const body = authMode === "login" ? {username, password} : {username, email, password};
+
+			const res = await fetch(`http://localhost:3000/auth/${endpoint}`, {
 				method: "POST",
 				headers: {"Content-Type": "application/json"},
-				body: JSON.stringify({ username, password }),
+				body: JSON.stringify(body),
 			});
 
+			const data = await res.json();
+
 			if (res.ok) {
-				const token = await res.json();
-				localStorage.setItem("token", token.accessToken);
-				navigate("/dashboard");
+				if (authMode === "login") {
+					localStorage.setItem("token", data.accessToken);
+					navigate("/dashboard");
+				} else {
+					// alert successful and redirect to login
+					alert("Signup successful! Please log-in");
+					toggleAuthMode();
+				}
 			} else {
-				const errData = await res.json();
-				setError(errData.message || "Invalid username/password");
+				setError(data.message || "Invalid username/password");
 			}
+
 		} catch (err) {
 			console.error("error during login: ", err);
 			setError("An error occured. Please try again.");
 		}
 	};
+
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newEmail = e.target.value;
+		setEmail(newEmail);
+
+		if (!newEmail) {
+			setError("");
+		} else if (!emailRegex.test(newEmail)) {
+			setError("Invalid e-mail format.");
+		} else {
+			setError("");
+		}
+	}
+
+	const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setUsername(e.target.value);
+		setError("");
+	}
+
+	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(e.target.value);
+		setError("");
+	}
+
+	const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setConfirmPassword(e.target.value);
+		setError("");
+	}
+
 	return (
 		<div className="h-screen flex items-center justify-center bg-gradient-to-br from-[#072b8f] to-[rgb(218,223,231)]">
-			<div className="bg-white rounded-lg shadow-lg flex w-[1000px] h-[500px] overflow-hidden">		
+			<div className="bg-white rounded-lg shadow-lg flex w-[1000px] h-[600px] overflow-hidden">		
 				{/* left */}
 				<div 
 						className="w-1/2 bg-cover bg-center flex items-center justify-center"
@@ -70,6 +127,21 @@ const AuthPage: React.FC = () => {
 					{error && <p className="text-red-500 mb-4">{error}</p>}
 
 					<form onSubmit={handleSubmit}>
+						{authMode === "signup" && (
+							<div className="mb-4">
+								<label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+										E-mail
+								</label>
+								<input
+									type="email"
+									id="email"
+									className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+									value={email}
+									onChange={handleEmailChange}
+									placeholder="Enter your e-mail"
+								/>
+							</div>
+						)}
 						<div className="mb-4">
 							<label htmlFor="username" className="block text-gray-700 font-bold mb-2">
 								Username
@@ -79,7 +151,7 @@ const AuthPage: React.FC = () => {
 								id="username"
 								className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
 								value={username}
-								onChange={(e) => setUsername(e.target.value)}
+								onChange={handleUsernameChange}
 								placeholder="Enter your username"
 							/>
 						</div>
@@ -93,7 +165,7 @@ const AuthPage: React.FC = () => {
 									id="password"
 									className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
 									value={password}
-									onChange={(e) => setPassword(e.target.value)}
+									onChange={handlePasswordChange}
 									placeholder="Enter your password"
 									required
 								/>
@@ -117,7 +189,7 @@ const AuthPage: React.FC = () => {
 										type={showConfirmPassword? "text" : "password"}
 										className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
 										value={confirmPassword}
-										onChange={(e) => setConfirmPassword(e.target.value)}
+										onChange={handleConfirmPasswordChange}
 										placeholder="Confirm your password"
 										required
 									/>
@@ -135,6 +207,7 @@ const AuthPage: React.FC = () => {
 							<button
 								type="submit"
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 cursor-pointer"
+								disabled={!!error}
 							>
 								{authMode === "login" ? "Log In" : "Sign Up"}
 							</button>
