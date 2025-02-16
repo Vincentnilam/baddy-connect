@@ -63,6 +63,10 @@ This project is a simple authentication system built with **React (TypeScript)**
    cd ../server
    npm run start
 
+Current page as in 15/2
+![image](https://github.com/user-attachments/assets/1cb85401-993c-4239-ad07-c97af7114fe7)
+
+
 
 Successful Login (hmm signup is still via POST manually)
 
