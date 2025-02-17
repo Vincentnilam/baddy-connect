@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -24,7 +25,8 @@ import databaseConfig from './config/database.config';
       inject: [ConfigService],
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    MailModule
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
