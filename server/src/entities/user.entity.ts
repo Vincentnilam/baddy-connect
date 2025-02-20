@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { VerificationToken } from "./verificationtoken.entity";
 
 @Entity()
 export class User {
@@ -17,7 +18,7 @@ export class User {
     @Column({ default: false })
     verified: boolean;
 
-    @Column({ nullable: true })
-    verificationToken: string;
+    @OneToMany(() => VerificationToken, (verificationToken) => verificationToken.user)
+    verificationTokens: VerificationToken[];
 
 }

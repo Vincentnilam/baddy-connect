@@ -8,6 +8,7 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
+import { VerificationModule } from './verification/verification.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -26,7 +27,8 @@ import databaseConfig from './config/database.config';
     }),
     UsersModule,
     AuthModule,
-    MailModule
+    MailModule,
+    VerificationModule
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],

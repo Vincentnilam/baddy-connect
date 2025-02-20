@@ -29,6 +29,7 @@ let AuthService = class AuthService {
             throw new common_1.ConflictException("Email is already taken.");
         }
         const hashedPass = await bcrypt.hash(password, 10);
+        const verifToken = crypto.randomUUID();
         return this.userService.create(username, email, hashedPass);
     }
     async login(username, password) {

@@ -25,6 +25,8 @@ export class AuthService {
 
         // else hashed password
         const hashedPass = await bcrypt.hash(password, 10);
+        // create a random token 
+        const verifToken = crypto.randomUUID();
 
         return this.userService.create(username, email, hashedPass);
     }
