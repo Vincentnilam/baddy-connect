@@ -3,5 +3,9 @@ import { VerificationService } from './verification.service';
 
 @Controller('verification')
 export class VerificationController {
-  constructor(private readonly verificationService: VerificationService) {}
+  constructor(private readonly verificationService: VerificationService) {
+
+  }
+
+  
 }

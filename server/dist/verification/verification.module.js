@@ -12,6 +12,7 @@ const verification_service_1 = require("./verification.service");
 const verification_controller_1 = require("./verification.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const verificationtoken_entity_1 = require("../entities/verificationtoken.entity");
+const mail_module_1 = require("../mail/mail.module");
 let VerificationModule = class VerificationModule {
 };
 exports.VerificationModule = VerificationModule;
@@ -19,6 +20,7 @@ exports.VerificationModule = VerificationModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forFeature([verificationtoken_entity_1.VerificationToken]),
+            mail_module_1.MailModule
         ],
         controllers: [verification_controller_1.VerificationController],
         providers: [verification_service_1.VerificationService],

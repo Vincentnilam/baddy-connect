@@ -17,13 +17,16 @@ const common_1 = require("@nestjs/common");
 const verificationtoken_entity_1 = require("../entities/verificationtoken.entity");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
+const mail_service_1 = require("../mail/mail.service");
 let VerificationService = class VerificationService {
-    constructor(verifRepo) {
+    constructor(verifRepo, mailService) {
         this.verifRepo = verifRepo;
+        this.mailService = mailService;
     }
     async generateAndSendToken(user) {
         const token = crypto.randomUUID();
-        this.createToken(user, token);
+        await this.createToken(user, token);
+        await this.mailService.sendVerificationEmail(user.email, token);
     }
     async createToken(user, token) {
         const verifToken = this.verifRepo.create({
@@ -40,13 +43,14 @@ let VerificationService = class VerificationService {
         });
     }
     async deleteToken(token) {
-        this.verifRepo.delete({ token });
+        await this.verifRepo.delete({ token });
     }
 };
 exports.VerificationService = VerificationService;
 exports.VerificationService = VerificationService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(verificationtoken_entity_1.VerificationToken)),
-    __metadata("design:paramtypes", [typeorm_1.Repository])
+    __metadata("design:paramtypes", [typeorm_1.Repository,
+        mail_service_1.MailService])
 ], VerificationService);
 //# sourceMappingURL=verification.service.js.map

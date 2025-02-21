@@ -16,6 +16,7 @@ const jwt_1 = require("@nestjs/jwt");
 const jwt_strategy_1 = require("./jwt.strategy");
 const users_module_1 = require("../users/users.module");
 const config_1 = require("@nestjs/config");
+const verification_module_1 = require("../verification/verification.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -32,6 +33,7 @@ exports.AuthModule = AuthModule = __decorate([
                 inject: [config_1.ConfigService],
             }),
             users_module_1.UsersModule,
+            verification_module_1.VerificationModule,
         ],
         providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
         controllers: [auth_controller_1.AuthController],

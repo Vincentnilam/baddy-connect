@@ -1,14 +1,16 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { VerificationService } from '../verification/verification.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userService: UsersService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private verifService: VerificationService,
     ) {}
 
     async signup(username: string, email: string, password: string): Promise<User> {
@@ -25,10 +27,12 @@ export class AuthService {
 
         // else hashed password
         const hashedPass = await bcrypt.hash(password, 10);
-        // create a random token 
-        const verifToken = crypto.randomUUID();
 
-        return this.userService.create(username, email, hashedPass);
+        const user = await this.userService.create(username, email, hashedPass);
+        await this.verifService.generateAndSendToken(user);
+
+        return user;
+        
     }
 
     async login(username: string, password: string): Promise<{ accessToken: string}> {
@@ -43,5 +47,29 @@ export class AuthService {
         const accessToken = this.jwtService.sign(payload);
 
         return { accessToken };
+    }
+
+    async verifyAccount(token: string): Promise<{message: string }> {
+        try {
+            const verifToken = await this.verifService.findByToken(token);
+
+            if (!verifToken) {
+                throw new BadRequestException('Invalid or expired verification token');
+            }
+
+            const user = verifToken.user;
+
+            if (!user) {
+                throw new NotFoundException("User associated with this token isn't found");
+            }
+            // update to be verified
+            await this.userService.update(user.id, { verified: true});
+            // delete verif token after verified
+            await this.verifService.deleteToken(token);
+
+            return {message: 'Verified'};
+        } catch (error) {
+            return {message: 'Error'};
+        }
     }
 }

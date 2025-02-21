@@ -14,10 +14,12 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
 const users_service_1 = require("../users/users.service");
+const verification_service_1 = require("../verification/verification.service");
 let AuthService = class AuthService {
-    constructor(userService, jwtService) {
+    constructor(userService, jwtService, verifService) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.verifService = verifService;
     }
     async signup(username, email, password) {
         const existingUserByUsername = await this.userService.findOne(username);
@@ -29,8 +31,9 @@ let AuthService = class AuthService {
             throw new common_1.ConflictException("Email is already taken.");
         }
         const hashedPass = await bcrypt.hash(password, 10);
-        const verifToken = crypto.randomUUID();
-        return this.userService.create(username, email, hashedPass);
+        const user = await this.userService.create(username, email, hashedPass);
+        await this.verifService.generateAndSendToken(user);
+        return user;
     }
     async login(username, password) {
         const user = await this.userService.findOne(username);
@@ -41,11 +44,30 @@ let AuthService = class AuthService {
         const accessToken = this.jwtService.sign(payload);
         return { accessToken };
     }
+    async verifyAccount(token) {
+        try {
+            const verifToken = await this.verifService.findByToken(token);
+            if (!verifToken) {
+                throw new common_1.BadRequestException('Invalid or expired verification token');
+            }
+            const user = verifToken.user;
+            if (!user) {
+                throw new common_1.NotFoundException("User associated with this token isn't found");
+            }
+            await this.userService.update(user.id, { verified: true });
+            await this.verifService.deleteToken(token);
+            return { message: 'Verified' };
+        }
+        catch (error) {
+            return { message: 'Error' };
+        }
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        verification_service_1.VerificationService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

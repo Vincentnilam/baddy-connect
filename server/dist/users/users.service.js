@@ -34,6 +34,10 @@ let UsersService = class UsersService {
         const newUser = this.usersRepository.create({ username, email, password });
         return this.usersRepository.save(newUser);
     }
+    async update(userId, data) {
+        await this.usersRepository.update(userId, data);
+        return this.usersRepository.findOne({ where: { id: userId } });
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

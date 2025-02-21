@@ -9,4 +9,7 @@ export declare class AuthController {
     getMe(req: any): Promise<{
         message: string;
     }>;
+    verifyAccount(token: string): Promise<{
+        message: string;
+    }>;
 }

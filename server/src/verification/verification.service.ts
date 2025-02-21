@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
-import { VerificationToken } from 'src/entities/verificationtoken.entity';
+import { VerificationToken } from '../entities/verificationtoken.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailService } from '../mail/mail.service';
 
 
 @Injectable()
@@ -10,13 +11,15 @@ export class VerificationService {
   constructor(
     @InjectRepository(VerificationToken)
             private verifRepo: Repository<VerificationToken>,
+            private readonly mailService: MailService,
   ) {}
 
   async generateAndSendToken(user: User): Promise<void> {
     const token = crypto.randomUUID();
     // save token to db
-    this.createToken(user, token);
-    // todo: send verif email to user
+    await this.createToken(user, token);
+
+    await this.mailService.sendVerificationEmail(user.email, token);
   }
 
   // initial creation of token
@@ -40,6 +43,6 @@ export class VerificationService {
 
   // delete token after successful verif
   async deleteToken(token: string): Promise<void> {
-    this.verifRepo.delete({ token });
+    await this.verifRepo.delete({ token });
   }
 }
