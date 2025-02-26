@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner} from 'react-icons/fa';
 import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 
 const AuthPage: React.FC = () => {
 	const [authMode, setAuthMode] = useState<"login"|"signup">("login");
@@ -71,8 +73,7 @@ const AuthPage: React.FC = () => {
 					localStorage.setItem("token", data.accessToken);
 					navigate("/dashboard");
 				} else {
-					// alert successful and redirect to login
-					alert("Signup successful! Please log-in");
+					toast.success("Signup successful! Please check your email for verification link!.");
 					toggleAuthMode();
 				}
 			} else {
@@ -119,6 +120,7 @@ const AuthPage: React.FC = () => {
 		<div className="h-screen flex items-center justify-center bg-gradient-to-br from-[#072b8f] to-[rgb(218,223,231)]">
 			<div className="bg-white rounded-lg shadow-lg flex w-[1000px] h-[600px] overflow-hidden">		
 				{/* left */}
+				<ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 				<div 
 						className="w-1/2 bg-cover bg-center flex items-center justify-center"
 						style={{ backgroundImage: "url('/src/assets/logo.jpg')" }}
