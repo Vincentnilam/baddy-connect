@@ -4,6 +4,7 @@ import './index.css'
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import VerifyEmail from './components/VerifyEmail';
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<AuthPage />} />
         <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route
 					path="/dashboard"
 					element={
