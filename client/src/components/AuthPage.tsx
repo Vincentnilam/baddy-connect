@@ -60,7 +60,7 @@ const AuthPage: React.FC = () => {
 			const endpoint = authMode === "login" ? "login" : "signup";
 			const body = authMode === "login" ? {username, password} : {username, email, password};
 
-			const res = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+			const res = await fetch(`${import.meta.env.VITE_BACKEND_APP_URL}/auth/${endpoint}`, {
 				method: "POST",
 				headers: {"Content-Type": "application/json"},
 				body: JSON.stringify(body),
