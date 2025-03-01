@@ -117,121 +117,125 @@ const AuthPage: React.FC = () => {
 	}
 
 	return (
-		<div className="h-screen flex items-center justify-center bg-gradient-to-br from-[#072b8f] to-[rgb(218,223,231)]">
-			<div className="bg-white rounded-lg shadow-lg flex w-[1000px] h-[600px] overflow-hidden">		
-				{/* left */}
-				<ToastContainer position="top-right" autoClose={3000} hideProgressBar />
-				<div 
-						className="w-1/2 bg-cover bg-center flex items-center justify-center"
-						style={{ backgroundImage: "url('/src/assets/logo.jpg')" }}
-				>
-				</div>
-				{/* right */}
-				<div className="w-1/2 p-6 flex flex-col justify-center">
-					<h2 className="text-2xl font-bold mb-4 text-center">
-						{ authMode === "login" ? "Login" : "Sign Up"}
-					</h2>
-					
-					{error && <p className="text-red-500 mb-4">{error}</p>}
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#121212] to-[#1E1E1E] p-4">
+			<div className="bg-[#1E1E1E] text-white rounded-lg shadow-lg p-8 w-full max-w-md overflow-hidden">		
+				<img src="/src/assets/logo.jpg" alt="Baddie Connect's Logo" className="mx-auto w-70 h-40 object-contain" />
+				<h2 className="text-2xl font-bold mb-5 text-center">
+					{ authMode === "login" ? "Login" : "Sign Up"}
+				</h2>
+				
+				{error && <p className="text-red-500 mb-4">{error}</p>}
 
-					<form onSubmit={handleSubmit}>
-						{authMode === "signup" && (
-							<div className="mb-4">
-								<label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-										E-mail
-								</label>
-								<input
-									type="email"
-									id="email"
-									className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-									value={email}
-									onChange={handleEmailChange}
-									placeholder="Enter your e-mail"
-								/>
-							</div>
-						)}
-						<div className="mb-4">
-							<label htmlFor="username" className="block text-gray-700 font-bold mb-2">
-								Username
-							</label>
+				<form onSubmit={handleSubmit}>
+					{authMode === "signup" && (
+						<div className="relative mb-8">
 							<input
-								type="text"
-								id="username"
-								className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-								value={username}
-								onChange={handleUsernameChange}
-								placeholder="Enter your username"
+								type="email"
+								id="email"
+								value={email}
+								onChange={handleEmailChange}
+								className="peer w-full px-4 pt-6 pb-2 bg-[#252525] border border-gray-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-transparent"
+								placeholder="Email"
+							/>
+							<label
+								htmlFor="email"
+								className={`absolute left-4 text-gray-500 text-base transition-all bg-[#252525]
+									${email ? "top-2 text-sm text-blue-400" : "top-5 text-gray-500"}
+									peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400`}
+							>
+								Email
+							</label>
+						</div>
+					)}
+					<div className="relative mb-8">
+						<input
+							type="text"
+							id="username"
+							className="peer w-full px-4 pt-6 pb-2 bg-[#252525] border border-gray-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-transparent"
+							value={username}
+							onChange={handleUsernameChange}
+							placeholder="Username"
+							required
+						/>
+						<label 
+							htmlFor="username" 
+							className={`absolute left-4 text-gray-500 text-base transition-all bg-[#252525]
+								${username ? "top-2 text-sm text-blue-400" : "top-5 text-gray-500"}
+								peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400`}
+						>
+								Username
+						</label>
+					</div>
+					<div className="relative mb-8">
+						<input
+							type={showPassword ? "text" : "password"}
+							id="password"
+							className="peer w-full px-4 pt-6 pb-2 bg-[#252525] border border-gray-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-transparent"
+							value={password}
+							onChange={handlePasswordChange}
+							placeholder="Enter your password"
+							required
+						/>
+						<label 
+							htmlFor="password" 
+							className={`absolute left-4 text-gray-500 text-base transition-all bg-[#252525]
+								${password ? "top-2 text-sm text-blue-400" : "top-5 text-gray-500"}
+								peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400`}>
+								Password
+						</label>
+						<button
+							type="button"
+							className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
+							onClick={() => setShowPassword(!showPassword)}
+						>
+							{showPassword ? <FaEye className="text-gray-400" /> : <FaEyeSlash className="text-gray-400" />}
+						</button>
+					</div>
+					
+					{authMode === "signup" && (
+						<div className="relative mb-8">
+							<input
+								type={showConfirmPassword? "text" : "password"}
+								className="peer w-full px-4 pt-6 pb-2 bg-[#252525] border border-gray-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-transparent"
+								value={confirmPassword}
+								onChange={handleConfirmPasswordChange}
+								placeholder="Confirm your password"
 								required
 							/>
-						</div>
-						<div className="mb-6">
-							<label htmlFor="password" className="block text-gray-700 font-bold mb-2">
-								Password
-							</label>
-							<div className="relative">
-								<input
-									type={showPassword ? "text" : "password"}
-									id="password"
-									className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-									value={password}
-									onChange={handlePasswordChange}
-									placeholder="Enter your password"
-									required
-								/>
-								<button
-									type="button"
-									className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
-									onClick={() => setShowPassword(!showPassword)}
-								>
-									{showPassword ? <FaEye className="text-gray-500" /> : <FaEyeSlash className="text-gray-500" />}
-								</button>
-							</div>
-						</div>
-						
-						{authMode === "signup" && (
-							<div className="mb-6">
-								<label htmlFor="confirmPassword" className="block text-gray-700 font-bold mb-2">
+							<label 
+								htmlFor="confirmPassword"
+								className={`absolute left-4 text-gray-500 text-base transition-all bg-[#252525]
+									${confirmPassword ? "top-2 text-sm text-blue-400" : "top-5 text-gray-500"}
+									peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400`}>
 									Confirm Password
-								</label>
-								<div className="relative">
-									<input
-										type={showConfirmPassword? "text" : "password"}
-										className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-										value={confirmPassword}
-										onChange={handleConfirmPasswordChange}
-										placeholder="Confirm your password"
-										required
-									/>
-									<button
-										type="button"
-										className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
-										onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-									>
-										{showConfirmPassword ? <FaEye className="text-gray-500" /> : <FaEyeSlash className="text-gray-500" />}
-									</button>
-								</div>
-							</div>
-						)}
-						<div className="flex justify-center">
+							</label>
 							<button
-								type="submit"
-								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-[100px] h-[40px]"
-								disabled={loading || !!error}
+								type="button"
+								className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
+								onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 							>
-								{loading ? <FaSpinner className="animate-spin" /> : authMode === "login" ? "Log In" : "Sign Up"}
+								{showConfirmPassword ? <FaEye className="text-gray-400" /> : <FaEyeSlash className="text-gray-400" />}
 							</button>
 						</div>
-					</form>
-					<div className="mt-4 text-center">
-						<p className="text-gray-700">
-							{authMode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
-							<button className="text-blue-500 hover:underline cursor-pointer" onClick={toggleAuthMode}>
-								{authMode === "login" ? "Sign Up" : "Log In"}
-							</button>
-						</p>
+					)}
+					<div className="flex justify-center">
+						<button
+							type="submit"
+							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 cursor-pointer flex items-center justify-center min-w-[100px] h-[40px]"
+							disabled={loading || !!error}
+						>
+							{loading ? <FaSpinner className="animate-spin" /> : authMode === "login" ? "Log In" : "Sign Up"}
+						</button>
 					</div>
-				</div>
+				</form>
+				<p className="mt-4 text-center text-gray-400">
+					{authMode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
+					<button className="text-blue-400 font-semibold hover:underline cursor-pointer" onClick={toggleAuthMode}>
+						{authMode === "login" ? "Sign Up" : "Log In"}
+					</button>
+				</p>
 			</div>
+			<ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 		</div>
 	);
 };
