@@ -1,9 +1,7 @@
-# React x NestJS Authentication App
-
-This project is a simple authentication system built with **React (TypeScript)** for the frontend and **NestJS** for the backend. It supports user login and authentication using **JWTs** with secure token management.
+# Baddy Connect
 
 ---
-
+Baddy Connect is a social platform designed for badminton enthusiasts. Users can create and join badminton sessions, making it easier to connect with other players. In the future, the platform may also support online payments for session fees.
 ## Features
 
 - **User Authentication**: Users can log in using a username and password.
@@ -14,6 +12,11 @@ This project is a simple authentication system built with **React (TypeScript)**
   - Tokens are validated for every protected request.
 - **Responsive UI**: A clean and responsive design built with Tailwind CSS.
 - **Error Handling**: Detailed error messages for login and data fetching.
+- **Future features** :
+  - * **Role-Based Session Management**:
+    1. **Session Creators**: Can create and manage badminton social sessions.
+    2. **Players**: Can browse and join available social sessions.
+  - * **Online Payments**
 
 ---
 
@@ -65,10 +68,5 @@ This project is a simple authentication system built with **React (TypeScript)**
    cd ../server
    npm run start
 
-Current page as in 15/2
-![image](https://github.com/user-attachments/assets/1cb85401-993c-4239-ad07-c97af7114fe7)
-
-22-02-25
-Verification e-mail example:
-
-![image](https://github.com/user-attachments/assets/d93c2566-6ff6-4e2f-b615-a2d137f034db)
+Current page as in 1/3/25
+![image](https://github.com/user-attachments/assets/b4d46cb0-7a8d-494e-8a57-fdf29dc6438a)
