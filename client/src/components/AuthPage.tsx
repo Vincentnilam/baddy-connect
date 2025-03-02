@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner} from 'react-icons/fa';
 import { useNavigate } from "react-router";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 
 const AuthPage: React.FC = () => {
@@ -235,7 +235,6 @@ const AuthPage: React.FC = () => {
 					</button>
 				</p>
 			</div>
-			<ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 		</div>
 	);
 };
