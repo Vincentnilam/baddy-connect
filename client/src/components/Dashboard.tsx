@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from "react";
 import { useNavigate } from "react-router";
+import Navbar from "./Navbar";
 
 const Dashboard: React.FC = () => {
     const [msg, setMsg] = useState<string | null>(null);
@@ -16,7 +17,7 @@ const Dashboard: React.FC = () => {
             }
             
             try {
-                const response = await fetch("http://localhost:3000/auth/me", {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_APP_URL}/auth/me`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -47,7 +48,7 @@ const Dashboard: React.FC = () => {
 
     if (error) {
 		return (
-			<div className="flex items-center justify-center h-screen bg-gray-100">
+			<div className="flex items-center justify-center h-screen bg-gradient-to-br from-[#121212] to-[#1E1E1E]">
 				<div className="text-center">
 					<p className="text-red-500 mb-4">{error}</p>
 					<button
@@ -62,18 +63,20 @@ const Dashboard: React.FC = () => {
 	}
 
 	return (
-		<div className="flex items-center justify-center h-screen bg-gray-100">
-			<div className="bg-white p-8 rounded-lg shadow-md text-center">
-				<h2 className="text-2xl font-bold mb-4">Welcome to the Dashboard!</h2>
-				{msg ? <p className="text-lg">{msg}</p> : <p>Loading...</p>}
-				<button
-					onClick={handleLogout}
-					className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mt-4"
-				>
-					Logout
-				</button>
-			</div>
-		</div>
+        <Navbar />
+
+		// <div className="flex items-center justify-center h-screen bg-gradient-to-br from-[#121212] to-[#1E1E1E]">
+		// 	<div className="bg-[#1E1E1E] p-8 rounded-lg shadow-md text-center">
+		// 		<h2 className="text-white text-2xl font-bold mb-4">Welcome to the Dashboard!</h2>
+		// 		{msg ? <p className="text-white text-lg">{msg}</p> : <p>Loading...</p>}
+		// 		<button
+		// 			onClick={handleLogout}
+		// 			className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md mt-4 cursor-pointer"
+		// 		>
+		// 			Logout
+		// 		</button>
+		// 	</div>
+		// </div>
 	);
 };
 

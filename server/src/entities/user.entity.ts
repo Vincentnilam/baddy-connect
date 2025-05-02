@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { VerificationToken } from "./verificationtoken.entity";
+import { UserRole } from "../common/enums/roles.enum";
 
 @Entity()
 export class User {
@@ -21,4 +22,6 @@ export class User {
     @OneToMany(() => VerificationToken, (verificationToken) => verificationToken.user)
     verificationTokens: VerificationToken[];
 
+    @Column({ type: 'enum', enum: UserRole ,default: UserRole.USER })
+    role: UserRole;
 }
