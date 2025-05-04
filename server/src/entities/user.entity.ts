@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { VerificationToken } from "./verificationtoken.entity";
 import { UserRole } from "../common/enums/roles.enum";
+import { Event } from "./event.entity";
 
 @Entity()
 export class User {
@@ -24,4 +25,7 @@ export class User {
 
     @Column({ type: 'enum', enum: UserRole ,default: UserRole.USER })
     role: UserRole;
+
+    @OneToMany(() => Event, (event) => event.organizer)
+    events: Event[];
 }

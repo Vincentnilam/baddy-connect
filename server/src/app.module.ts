@@ -9,6 +9,7 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { VerificationModule } from './verification/verification.module';
+import { EventsModule } from './events/events.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -28,7 +29,8 @@ import databaseConfig from './config/database.config';
     UsersModule,
     AuthModule,
     MailModule,
-    VerificationModule
+    VerificationModule,
+    EventsModule
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
