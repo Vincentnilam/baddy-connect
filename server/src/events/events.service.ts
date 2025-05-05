@@ -23,8 +23,11 @@ export class EventsService {
     return this.eventRepository.save(event);
   }
 
-  async findAll(): Promise<Event[]> {
-    return this.eventRepository.find();
+  async findAll(filter?: { organizerId?: number; isPublic?: boolean }): Promise<Event[]> {
+    const where: any = {};
+    if (filter?.organizerId) where.organizer = { id: filter.organizerId };
+    if (filter?.isPublic !== undefined) where.isPublic = filter.isPublic;
+    return this.eventRepository.find({ where });
   }
 
   async findOne(id: string): Promise<Event> {

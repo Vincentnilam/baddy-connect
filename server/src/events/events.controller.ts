@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, Query } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -20,8 +20,8 @@ export class EventsController {
   }
 
   @Get()
-  async findAll(): Promise<Event[]> {
-    return this.eventsService.findAll();
+  async findAll(@Query('organizerId') organizerId?: number, @Query('isPublic') isPublic?: boolean): Promise<Event[]> {
+    return this.eventsService.findAll({ organizerId, isPublic });
   }
 
   @Get(':id')
