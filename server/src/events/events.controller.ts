@@ -20,11 +20,13 @@ export class EventsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   async findAll(@Query('organizerId') organizerId?: number, @Query('isPublic') isPublic?: boolean): Promise<Event[]> {
     return this.eventsService.findAll({ organizerId, isPublic });
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   async findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);
   }
@@ -42,4 +44,19 @@ export class EventsController {
   async remove(@Param('id') id: string, @Request() req) {
     return this.eventsService.remove(id, req.user);
   }
+
+  @Post(':id/join')
+  @UseGuards(AuthGuard('jwt'))
+  async joinEvent(@Param('id') id: string, @Request() req) {
+    return this.eventsService.registerPlayer(id, req.user);
+  }
+
+  @Delete(':id/leave')
+  @UseGuards(AuthGuard('jwt'))
+  async leaveEvent(@Param('id') id: string, @Request() req) {
+    return this.eventsService.unregisterPlayer(id, req.user);
+  }
 }
+
+
+

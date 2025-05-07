@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from "typeorm";
 import { VerificationToken } from "./verificationtoken.entity";
 import { UserRole } from "../common/enums/roles.enum";
 import { Event } from "./event.entity";
@@ -28,4 +28,7 @@ export class User {
 
     @OneToMany(() => Event, (event) => event.organizer)
     events: Event[];
+
+    @ManyToMany(() => Event, (event) => event.players)
+    joinedEvents: Event[];
 }

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Repository } from 'typeorm';
@@ -53,5 +53,31 @@ export class EventsService {
     }
     await this.eventRepository.remove(event);
     return { message: 'Event deleted successfully' };
+  }
+
+  // register to session/event
+  async registerPlayer(eventId: string, user: User): Promise<Event> {
+    // we only care about current players to check 1. if they're already registered, 2. check if event is full, 3. add/remove player. hence,
+    // we don't need to load the organizer relation
+    const event = await this.eventRepository.findOne({ where: { id: eventId }, relations: ['players'] });
+    if (!event) throw new NotFoundException('Event not found');
+
+    // no duplicate registration
+    const isRegistered = event.players.some(p => p.id === user.id);
+    if (isRegistered) throw new BadRequestException('Already registered');
+
+    if (event.players.length >= event.maxPlayers) {
+      throw new BadRequestException('Event is full');
+    }
+
+    event.players.push(user);
+    return this.eventRepository.save(event);
+  }
+
+  async unregisterPlayer(eventId: string, user: User): Promise<Event> {
+    const event = await this.eventRepository.findOne({ where: { id: eventId }, relations: ['players'] });
+    if (!event) throw new NotFoundException('Event not found');
+    event.players = event.players.filter(p => p.id !== user.id);
+    return this.eventRepository.save(event);
   }
 }
