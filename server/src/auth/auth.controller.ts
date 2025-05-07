@@ -27,7 +27,14 @@ export class AuthController {
     @UseGuards(AuthGuard('jwt'))
     @Get('me')
     async getMe(@Request() req) {
-        return { message : `Hello, ${req.user.username}!`};
+        const user = req.user;
+        return {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            verified: user.verified,
+        };
     }
 
     @Get('verify-email')
