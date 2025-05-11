@@ -1,8 +1,10 @@
 import React, { useEffect, useState} from "react";
 import { useNavigate } from "react-router";
-import Navbar from "./Navbar";
+// import Navbar from "./Navbar";
 import { Event } from "../types/Event";
 import { User } from "../types/User";
+import LayoutShell from "./LayoutShell";
+import EventCard from "./EventCard";
 
 const Dashboard: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
@@ -60,13 +62,7 @@ const Dashboard: React.FC = () => {
 
     const handleJoin = (eventId: string) => {
         console.log("Joining event:", eventId);
-        // You’ll later replace this with an API call
     };
-
-    const handleLogout = () => {
-		localStorage.removeItem("token");
-		navigate("/login");
-	};
 
     // can see my events if it's created by organizer
     const myEvents = events.filter(e => e.organizer.id === user?.id);
@@ -89,70 +85,48 @@ const Dashboard: React.FC = () => {
 	}
 
 	return (
-        <>
-          <Navbar />
-          <div className="pt-24 px-4 max-w-4xl mx-auto text-white">
-            <h2 className="text-3xl font-bold mb-6 text-center">Dashboard, {user?.username}</h2>
-      
-            {/* My Events only for Admins or Organizers */}
+      <>
+        <LayoutShell>
+          <div className="px-6 py-10 max-w-6xl mx-auto text-white">
+            <h2 className="text-4xl font-bold mb-10">Dashboard, {user?.username}</h2>
+
+            {/* My Events */}
             {(user?.role === "admin" || user?.role === "organizer") && (
-                <div className="mb-8">
-                    <h3 className="text-2xl font-semibold mb-2 text-gray-300">My Events</h3>
-                    {myEvents.length === 0 ? (
-                        <p className="text-gray-400">You haven’t created any events.</p>
-                    ) : (
-                        <ul className="space-y-6">
-                            {myEvents.map(e => (
-                                <li key={e.id} className="bg-[#2A2A2A] p-6 rounded-lg shadow-lg hover:shadow-xl transition-all ease-in-out">
-                                    <div className="flex justify-between">
-                                        <div>
-                                            <p className="font-semibold text-lg">{e.title}</p>
-                                            <p className="text-sm text-gray-400">{new Date(e.datetime).toLocaleString()}</p>
-                                        </div>
-                                        <button
-                                            onClick={() => navigate(`/events/${e.id}`)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition duration-200"
-                                        >
-                                            View
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
+              <section className="mb-12">
+                <h3 className="text-2xl font-semibold mb-4 text-gray-300 tracking-wide">
+                  My Events
+                </h3>
+                {myEvents.length === 0 ? (
+                  <p className="text-gray-500">You haven’t created any events.</p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {myEvents.map((e) => (
+                      <EventCard key={e.id} event={e} type="my" />
+                    ))}
+                  </div>
+                )}
+              </section>
             )}
-      
-            <div>
-              <h3 className="text-2xl font-semibold mb-2 text-gray-300">Public Events</h3>
+
+            {/* Public Events */}
+            <section>
+              <h3 className="text-2xl font-semibold mb-4 text-gray-300 tracking-wide">
+                Public Events
+              </h3>
               {publicEvents.length === 0 ? (
-                <p className="text-gray-400">No public events available right now.</p>
+                <p className="text-gray-500">No public events available right now.</p>
               ) : (
-                <ul className="space-y-6">
-                  {publicEvents.map(e => (
-                    <li key={e.id} className="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover:shadow-xl transition-all ease-in-out">
-                      <div className="flex justify-between">
-                        <div>
-                          <p className="font-semibold text-lg">{e.title}</p>
-                          <p className="text-sm text-gray-400">
-                            Hosted by {e.organizer.username} • {new Date(e.datetime).toLocaleString()}
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => handleJoin(e.id)}
-                          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition duration-200"
-                        >
-                          Join
-                        </button>
-                      </div>
-                    </li>
+                <div className="space-y-6">
+                  {publicEvents.map((e) => (
+                    <EventCard key={e.id} event={e} type="public" onJoin={handleJoin} />
                   ))}
-                </ul>
+                </div>
               )}
-            </div>
+            </section>
           </div>
-        </>
-      );
+        </LayoutShell>
+      </>
+    );
 };
 
 export default Dashboard;

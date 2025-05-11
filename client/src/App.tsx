@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import VerifyEmail from './components/VerifyEmail';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import CreateEventPage from './components/CreateEventPage';
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/events/create"
+            element={
+              <ProtectedRoute allowedRoles={['organizer', 'admin']}>
+                <CreateEventPage />
               </ProtectedRoute>
             }
           />
