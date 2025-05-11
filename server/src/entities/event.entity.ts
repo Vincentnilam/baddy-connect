@@ -14,7 +14,10 @@ export class Event {
   location: string;
 
   @Column()
-  datetime: Date;
+  startDate: Date;
+
+  @Column()
+  endDate: Date;
 
   @Column()
   maxPlayers: number;

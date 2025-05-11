@@ -14,12 +14,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
 
   if (!token) return <Navigate to="/login" />;
 
-  if (allowedRoles && token) {
     try {
       const decoded: any = jwtDecode(token);
       const userRole = decoded?.role;
 
-      if (!allowedRoles.includes(userRole)) {
+      if (allowedRoles && !allowedRoles.includes(userRole)) {
         // navigate dashboard or forbidden?
         return <Forbidden />;
       }
@@ -27,7 +26,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
       console.error("Invalid token", err);
       return <Navigate to="/login" />;
     }
-  }
+  
   return children;
 };
 

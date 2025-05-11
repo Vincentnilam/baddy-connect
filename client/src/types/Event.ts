@@ -2,7 +2,8 @@ export interface Event {
   id: string;
   title: string;
   location: string;
-  datetime: string;
+  startDate: string;
+  endDate: string;
   maxPlayers: number;
   createdAt: string;
   courtCount: number;

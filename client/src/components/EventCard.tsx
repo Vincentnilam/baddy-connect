@@ -1,5 +1,6 @@
 import { Calendar, MapPin, Users } from "lucide-react";
 import { Event } from "../types/Event";
+import { formatEventDateRange } from "../utils/formatEventDateRange";
 
 interface EventCardProps {
   event: Event;
@@ -8,20 +9,12 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event, type, onJoin }) => {
-  const formattedDate = new Date(event.datetime).toLocaleString("en-AU", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
 
   return (
     <div className="bg-[#1E1E1E] text-white rounded-lg shadow-lg hover:shadow-xl transition p-5">
       <div className="flex justify-between items-center mb-2">
         <span className="text-xs text-gray-400 flex items-center gap-1">
-          <Calendar size={14} /> {formattedDate}
+          <Calendar size={14} /> {formatEventDateRange(event.startDate, event.endDate)}
         </span>
         <span
           className={`text-xs px-2 py-1 rounded-full font-medium ${

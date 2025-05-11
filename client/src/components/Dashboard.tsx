@@ -1,6 +1,5 @@
 import React, { useEffect, useState} from "react";
 import { useNavigate } from "react-router";
-// import Navbar from "./Navbar";
 import { Event } from "../types/Event";
 import { User } from "../types/User";
 import LayoutShell from "./LayoutShell";

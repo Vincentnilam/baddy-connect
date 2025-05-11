@@ -82,7 +82,11 @@ const CreateEventPage: React.FC = () => {
     control,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<CreateEventForm>();
+  } = useForm<CreateEventForm>({
+    defaultValues: {
+      isPublic: true,
+    }
+  });
 
   const onSubmit = async (data: CreateEventForm) => {
     const token = localStorage.getItem("token");

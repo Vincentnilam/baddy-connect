@@ -9,7 +9,10 @@ export class CreateEventDto {
 	location: string;
 
 	@IsDateString()
-	datetime: string;
+	startDate: string;
+
+  @IsDateString()
+	endDate: string;
 
 	@IsInt()
 	maxPlayers: number;

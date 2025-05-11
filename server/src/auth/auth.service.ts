@@ -39,7 +39,11 @@ export class AuthService {
         const user = await this.userService.findOne(username);
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new UnauthorizedException("Invalid username or password");
+          throw new UnauthorizedException("Invalid username or password");
+        }
+
+        if (!user.verified) {
+          throw new UnauthorizedException("Account has not been verified. Please check your e-mail or contact administrator");
         }
 
         // generate jwt
